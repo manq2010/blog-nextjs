@@ -1,3 +1,4 @@
+import utilStyles from '../../styles/utils.module.css';
 import Head from 'next/head';
 // import Date from '../../components/date';
 import Layout from '../../components/layout';
@@ -9,6 +10,7 @@ export async function getStaticProps({ params }) {
     props: {
       postData,
     },
+    // params.id will be like ['a', 'b', 'c']
   };
 }
 
@@ -18,6 +20,20 @@ export async function getStaticPaths() {
     paths,
     fallback: false,
   };
+
+//   Catch-all Routes
+// pages/posts/[...id].js matches /posts/a, 
+// but also /posts/a/b, /posts/a/b/c and so on.
+
+//   return [
+//     {
+//       params: {
+//         // Statically Generates /posts/a/b/c
+//         id: ['a', 'b', 'c'],
+//       },
+//     },
+//     //...
+//   ];
 }
 
 export default function Post({ postData }) {
@@ -27,12 +43,21 @@ export default function Post({ postData }) {
         <title>{postData.title}</title>
         </Head>
 
-        {postData.title}
+        {/* {postData.title}
         <br />
         {postData.id}
         <br />
-        {postData.date}
+        {postData.date} */}
         {/* <Date dateString={postData.date} /> */}
+
+        <article>
+        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+        <div className={utilStyles.lightText}>
+          {/* <Date dateString={postData.date} /> */}
+            {postData.date}
+        </div>
+        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+        </article>
       </Layout>
     );
   }
